@@ -1,0 +1,13 @@
+{
+    "github": {
+        "repo": "box-nsqd"
+    },
+    "pivotal_tracker": {
+        "project": {
+            "id": 933918
+        }
+    },
+    "hipchat": {
+        "room": "NoHAP"
+    }
+}
