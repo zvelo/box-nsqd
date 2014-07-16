@@ -1,0 +1,31 @@
+name: nsqd
+version: 0.0.1
+inherits: wercker/default@0.0.2
+type: service
+platform: ubuntu@12.04
+description: wercker box for nsqd
+keywords:
+  - nsqd
+  - nsq
+packages:
+  - nsqd@0.2.28
+script: |
+  VERSION=0.2.28
+
+  wget https://s3.amazonaws.com/bitly-downloads/nsq/nsq-${VERSION}.linux-amd64.go1.2.1.tar.gz
+  tar zxf nsq-${VERSION}.linux-amd64.go1.2.1.tar.gz
+  cd nsq-${VERSION}.linux-amd64.go1.2.1/bin
+  chmod +x nsqd
+  sudo mkdir -p /var/lib/nsqd
+  sudo mv nsqd /usr/bin/
+
+  touch nsqd.conf
+  echo 'description "nsqd service registry"' >> nsqd.conf
+  echo 'start on started' >> nsqd.conf
+  echo 'stop on shutdown' >> nsqd.conf
+  echo 'exec nsqd -data-path=/var/lib/nsqd -tcp-address=0.0.0.0:4150' >> nsqd.conf
+  sudo mv nsqd.conf /etc/init/nsqd.conf
+env:
+  WERCKER_NSQD_HOST: $$HOST$$
+  WERCKER_NSQD_PORT: 4150
+  WERCKER_NSQD_VERSION: "0.2.28"
